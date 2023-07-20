@@ -13,7 +13,7 @@ esbuild.build({
   outfile: "index.js",
   tsconfig: "./tsconfig.package.json",
   treeShaking: true,
-  external: ['react-dom', 'react'],
+  external: ['react-dom', 'react', 'mqtt'],
   plugins: [
     cssModulesPlugin({
       inject: true,
