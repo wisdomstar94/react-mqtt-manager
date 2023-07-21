@@ -11,7 +11,7 @@ export declare namespace IUseMqttManager {
     topic: string;
     options: IClientSubscribeOptions;
     init?: (err: Error, granted: ISubscriptionGrant[]) => void;
-    callback: (message: string) => void;
+    callback: (topic: string, message: string) => void;
   }
 
   export interface Publisher {

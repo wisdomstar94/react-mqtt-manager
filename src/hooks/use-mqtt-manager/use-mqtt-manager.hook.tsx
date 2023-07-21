@@ -59,7 +59,7 @@ export function useMqttManager(props?: IUseMqttManager.Props) {
       });
       _mqttClient.on('message', function(topic, payload) {
         const message = payload.toString();
-        savedSubscribers.current.get(`${client.mqttFullUrl}${separateChar}${topic}`)?.callback(message);
+        savedSubscribers.current.get(`${client.mqttFullUrl}${separateChar}${topic}`)?.callback(topic, message);
       });
       
     }
@@ -115,8 +115,39 @@ export function useMqttManager(props?: IUseMqttManager.Props) {
     savedSubscribers.current.set(`${mqttFullUrl}${separateChar}${subscriber.topic}`, subscriber);
   }, []);
 
+  const mqttDisconnectAll = useCallback(() => {
+    const entries = Array.from(savedClientInfos.current.entries());
+
+    for (const [key, value] of entries) {
+      const clientInfo = value;
+      if (clientInfo !== undefined) {
+        const deleteTargetSavedSubscribersKeys: string[] = [];
+        for (const [key, subscriber] of Array.from(savedSubscribers.current.entries())) {
+          const [thisMqttFullUrl, topic] = key.split(separateChar);
+          console.log('@thisMqttFullUrl', thisMqttFullUrl);
+          console.log('@topic', topic);
+          if (thisMqttFullUrl !== key) {
+            continue;
+          }
+          clientInfo.mqttClient.unsubscribe(topic);
+          console.log('@...delete...', `${key}.${topic}`);
+          savedSubscribers.current.delete(`${key}${separateChar}${topic}`);
+          deleteTargetSavedSubscribersKeys.push(key);
+        }
+        deleteTargetSavedSubscribersKeys.forEach((key) => savedSubscribers.current.delete(key));
+
+        clientInfo.mqttClient.end(true);
+        if (typeof onDisconnectedClient === 'function') {
+          onDisconnectedClient(clientInfo.client);
+        }
+        savedClientInfos.current.delete(key);
+      }
+    }
+  }, [onDisconnectedClient]);
+
   return {
     mqttDisconnect,
+    mqttDisconnectAll,
     mqttConnect,
     unsubscribe,
     subscribe,
