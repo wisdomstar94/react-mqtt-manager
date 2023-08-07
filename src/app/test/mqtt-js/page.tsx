@@ -95,6 +95,19 @@ export default function Page() {
             <button
               className="px-6 py-2 bg-slate-300 hover:bg-slate-500 rounded-lg cursor-pointer text-xs text-black"
               onClick={() => {
+                mqttManager.publish(mqttFullUrl, {
+                  topic: 'test2',
+                  message: '브라우저에서 보내는 메시지..입니다.',
+                  options: {
+                    qos: 2,
+                  },
+                });
+              }}>
+              test2 발행하기
+            </button>
+            <button
+              className="px-6 py-2 bg-slate-300 hover:bg-slate-500 rounded-lg cursor-pointer text-xs text-black"
+              onClick={() => {
                 mqttManager.subscribe(mqttFullUrl, 'test2');
               }}>
               test2 구독 하기
