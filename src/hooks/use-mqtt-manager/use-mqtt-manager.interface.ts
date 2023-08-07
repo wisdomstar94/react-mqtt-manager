@@ -10,7 +10,7 @@ export declare namespace IUseMqttManager {
   export interface Subscriber {
     topic: string;
     options: IClientSubscribeOptions;
-    init?: (err: Error, granted: ISubscriptionGrant[]) => void;
+    init?: (err: Error | null, granted: ISubscriptionGrant[]) => void;
     callback: (topic: string, message: string) => void;
   }
 

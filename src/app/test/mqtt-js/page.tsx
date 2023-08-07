@@ -38,9 +38,10 @@ export default function Page() {
   mqttManager.saveSubscribeInfo(mqttFullUrl, {
     topic: 'test2',
     options: { qos: 2 },
-    callback(message) {
-      console.log('@test2', timestamp);
-      console.log('@test2.message', message);
+    callback(topic, message) {
+      console.log('@timestamp', timestamp);
+      console.log('@topic', topic);
+      console.log('@message', message);
     },
   });
   
