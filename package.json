@@ -1,6 +1,6 @@
 {
   "name": "@wisdomstar94/react-mqtt-manager",
-  "version": "0.0.4-test.1",
+  "version": "0.0.4",
   "license": "MIT",
   "private": false,
   "scripts": {
